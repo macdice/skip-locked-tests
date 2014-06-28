@@ -1,7 +1,6 @@
 #include <postgresql/libpq-fe.h>
 
 #include <cassert>
-#include <functional>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -23,10 +22,10 @@ void setup(const char *dsn, int items)
 
 void work(const char *dsn, bool skip)
 {
-  PGconn *connection = PQconnectdb(dsn);
+  auto connection = PQconnectdb(dsn);
   assert(PQstatus(connection) == CONNECTION_OK);
   for (;;) {
-    PGresult *result = PQexec(connection, "BEGIN");
+    auto result = PQexec(connection, "BEGIN");
     assert(PQresultStatus(result) == PGRES_COMMAND_OK);
     PQclear(result);
     result = PQexec(connection,
@@ -79,10 +78,9 @@ int main(int argc, char *argv[])
 
   std::vector<std::thread> threads;
   for (auto i = 0; i < thread_count; ++i)
-    threads.push_back(std::thread(std::bind(&work, dsn, skip)));
+    threads.push_back(std::thread([&](){ work(dsn, skip); }));
   for(auto& thread: threads)
     thread.join();
-
   
   return 0;
 }
