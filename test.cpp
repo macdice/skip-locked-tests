@@ -29,8 +29,8 @@ void work(const char *dsn, bool skip)
     assert(PQresultStatus(result) == PGRES_COMMAND_OK);
     PQclear(result);
     result = PQexec(connection,
-		    skip ? "SELECT id, data FROM queue WHERE status = 'NEW' LIMIT 1 FOR UPDATE SKIP LOCKED DATA"
-		    : "SELECT id, data FROM queue WHERE status = 'NEW' LIMIT 1 FOR UPDATE");
+                    skip ? "SELECT id, data FROM queue WHERE status = 'NEW' LIMIT 1 FOR UPDATE SKIP LOCKED"
+                         : "SELECT id, data FROM queue WHERE status = 'NEW' LIMIT 1 FOR UPDATE");
     assert(PQresultStatus(result) == PGRES_TUPLES_OK);
     if (PQntuples(result) == 1) {
       assert(PQnfields(result) == 2);
