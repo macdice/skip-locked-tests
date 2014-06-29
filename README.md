@@ -7,7 +7,7 @@ As a simple example for people wondering what the point of this
 feature is, I created a table work (id, data, status)
 and then create 10,000 items with status 'NEW' and then started
 a number of worker threads that did the following pair of
-transactions, with and without SKIP LOCKED DATA on the end of the
+transactions, with and without SKIP LOCKED on the end of the
 SELECT statement, until all rows were deleted:
 
     BEGIN
